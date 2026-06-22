@@ -46,7 +46,7 @@ HEADERS = {
 
 def get_main_keyboard():
     keyboard = [
-        [KeyboardButton(text=" Check Numbers")]
+        [KeyboardButton(text="🔍 Check Numbers")]
     ]
     return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
 
@@ -94,14 +94,14 @@ async def check_crownit_number(phone_no: str, max_retries: int = 5) -> dict:
 async def cmd_start(message: types.Message):
     user_name = message.from_user.first_name
     welcome_text = (
-        f" <b>Welcome {user_name}!</b>\n\n"
-        " Send up to 10 numbers to check CrownIt status."
+        f"👑 <b>Welcome {user_name}!</b>\n\n"
+        "⚡️ Send up to 10 numbers to check CrownIt status."
     )
     await message.answer(welcome_text, reply_markup=get_main_keyboard())
 
-@dp.message(F.text == " Check Numbers")
+@dp.message(F.text == "🔍 Check Numbers")
 async def handle_check_numbers_btn(message: types.Message):
-    await message.answer(" <b>Send me any 10-digit number or a list of up to 10 numbers to check!</b>")
+    await message.answer("📝 <b>Send me any 10-digit number or a list of up to 10 numbers to check!</b>")
 
 @dp.message(F.text)
 async def process_number(message: types.Message):
@@ -112,14 +112,14 @@ async def process_number(message: types.Message):
     numbers = list(dict.fromkeys(numbers))  # remove duplicates
     
     if not numbers:
-        await message.answer(" <b>No valid 10-digit numbers found.</b>\nPlease send numbers like <code>9876543210</code>.")
+        await message.answer("⚠️ <b>No valid 10-digit numbers found.</b>\nPlease send numbers like <code>9876543210</code>.")
         return
 
     if len(numbers) > 10:
-        await message.answer(" <b>Too many numbers!</b>\nPlease send a maximum of 10 numbers at a time for bulk checking.")
+        await message.answer("⚠️ <b>Too many numbers!</b>\nPlease send a maximum of 10 numbers at a time for bulk checking.")
         return
 
-    processing_msg = await message.answer(f" <b>Loot Paglu Checker Running...</b>\nChecking {len(numbers)} number(s). Please wait! ")
+    processing_msg = await message.answer(f"🔄 <b>Ultimate PK 🚀 Checker Running...</b>\nChecking {len(numbers)} number(s). Please wait! ⚡️")
 
     # Run checks concurrently with live updates
     tasks = [asyncio.create_task(check_crownit_number(num)) for num in numbers]
@@ -147,13 +147,13 @@ async def process_number(message: types.Message):
             errors.append(f"{num} (Error: {result['error']})")
             
         completed += 1
-        live_text = f" <b>Loot Paglu Checker Running...</b>\nProgress: {completed}/{total_nums} \n\n"
+        live_text = f"🔄 <b>Ultimate PK 🚀 Checker Running...</b>\nProgress: {completed}/{total_nums} ⚡️\n\n"
         if unregistered:
-            live_text += f" Fresh: {len(unregistered)}\n"
+            live_text += f"✅ Fresh: {len(unregistered)}\n"
         if registered:
-            live_text += f" Registered: {len(registered)}\n"
+            live_text += f"❌ Registered: {len(registered)}\n"
         if errors:
-            live_text += f" Errors: {len(errors)}\n"
+            live_text += f"⚠️ Errors: {len(errors)}\n"
             
         try:
             await processing_msg.edit_text(live_text)
@@ -161,27 +161,27 @@ async def process_number(message: types.Message):
             pass
 
     # Format the final response
-    response_text = " <b>LOOT PAGLU CROWNIT REPORT</b> \n\n"
+    response_text = "👑 <b>ULTIMATE PK 🚀 CROWNIT REPORT</b> 👑\n\n"
     
     if unregistered:
-        response_text += " <b>NOT REGISTERED (FRESH):</b>\n"
+        response_text += "✅ <b>NOT REGISTERED (FRESH):</b>\n"
         for num in unregistered:
             response_text += f"<code>{num}</code>\n"
         response_text += "\n"
         
     if registered:
-        response_text += " <b>ALREADY REGISTERED:</b>\n"
+        response_text += "❌ <b>ALREADY REGISTERED:</b>\n"
         for num in registered:
             response_text += f"<code>{num}</code>\n"
         response_text += "\n"
         
     if errors:
-        response_text += " <b>ERRORS:</b>\n"
+        response_text += "⚠️ <b>ERRORS:</b>\n"
         for err in errors:
             response_text += f"<code>{err}</code>\n"
             
-    response_text += "\n"
-    response_text += " <b>Powered by Loot Paglu</b>"
+    response_text += "━━━━━━━━━━━━━━━━━━\n"
+    response_text += "🚀 <b>Powered by Ultimate PK 🚀</b>"
 
     await processing_msg.edit_text(response_text)
 
@@ -190,7 +190,7 @@ async def main():
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
     
-    print("Starting Loot Paglu CrownIt Checker Bot...")
+    print("Starting Ultimate PK 🚀 CrownIt Checker Bot...")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
